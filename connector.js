@@ -40,11 +40,11 @@ class ServiceNowConnector {
     * @return {string} ServiceNow URL
     */
     constructUri(serviceNowTable, query = null) {
-    let uri = `/api/now/table/${serviceNowTable}`;
-    if (query) {
-        uri = uri + '?' + query;
-    }
-    return uri;
+        let uri = `/api/now/table/${serviceNowTable}`;
+        if (query) {
+            uri = uri + '?' + query;
+        }
+        return uri;
     }
 
     /**
@@ -57,9 +57,9 @@ class ServiceNowConnector {
     * @return {boolean} Returns true if instance is hibernating. Otherwise returns false.
     */
     isHibernating(response) {
-    return response.body.includes('Instance Hibernating page')
-    && response.body.includes('<html>')
-    && response.statusCode === 200;
+        return response.body.includes('Instance Hibernating page')
+            && response.body.includes('<html>')
+            && response.statusCode === 200;
     }
 
 
@@ -86,16 +86,16 @@ class ServiceNowConnector {
 
         // Check for errors
         if (error) {
-        console.error('Found an error.');
-        callbackError = error;
+            log.info('Found an error.');
+            callbackError = error;
         } else if (!checkResponse.test(response.statusCode)) {
-        console.error('Improper HTTP response code.');
-        callbackError = response;
+            log.info('Improper HTTP response code.');
+            callbackError = response;
         } else if (this.isHibernating(response)) {
-        callbackError = 'ServiceNow instance is hibernating';
-        console.error(callbackError);
+            callbackError = 'ServiceNow instance is hibernating';
+            log.info(callbackError);
         } else {
-        callbackData = response;
+            callbackData = response;
         }
 
         return callback(callbackData, callbackError);
@@ -129,8 +129,8 @@ class ServiceNowConnector {
         const requestOptions = {
             method: callOptions.method,
             auth: {
-            user: callOptions.username,
-            pass: callOptions.password,
+                user: callOptions.username,
+                pass: callOptions.password,
             },
             baseUrl: callOptions.url,
             uri: uri,

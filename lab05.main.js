@@ -83,45 +83,22 @@ class ServiceNowAdapter extends EventEmitter {
     this.healthcheck();
   }
 
-    /**
-    * @memberof ServiceNowAdapter
-    * @method healthcheck
-    * @summary Check ServiceNow Health
-    * @description Verifies external system is available and healthy.
-    *   Calls method emitOnline if external system is available.
-    *
-    * @param {ServiceNowAdapter~requestCallback} [callback] - The optional callback
-    *   that handles the response.
-    */
-    healthcheck(callback) {
-        let callbackData = null;
-        let callbackError = null;
-        this.getRecord((result, error) => {
+  /**
+   * @memberof ServiceNowAdapter
+   * @method healthcheck
+   * @summary Check ServiceNow Health
+   * @description Verifies external system is available and healthy.
+   *   Calls method emitOnline if external system is available.
+   *
+   * @param {ServiceNowAdapter~requestCallback} [callback] - The optional callback
+   *   that handles the response.
+   */
+  healthcheck(callback) {
+    // We will build this method in a later lab. For now, it will emulate
+    // a healthy integration by emmitting ONLINE.
+    this.emitOnline();
+  }
 
-            /**
-                * For this lab, complete the if else conditional
-                * statements that check if an error exists
-                * or the instance was hibernating. You must write
-                * the blocks for each branch.
-                */
-            if (error) {
-                // The ServiceNow adapter cannot connect!
-                this.emitOffline
-                log.info(`The ServiceNow adapter cannot connect!\n${JSON.stringify(error)}`);
-                log.error(error);
-                callbackError = error;
-            } else {
-                // The ServiceNow adapter has successfully connected
-                this.emitOnline
-                log.info(`The ServiceNow adapter has successfully connected!`);
-                log.info(result);
-                callbackData = result;
-            }
-        });
-        if (callback) {
-            callback(callbackData, callbackError);
-        }
-    }
   /**
    * @memberof ServiceNowAdapter
    * @method emitOffline
@@ -175,7 +152,6 @@ class ServiceNowAdapter extends EventEmitter {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-     this.connector.get(callback)
   }
 
   /**
@@ -186,7 +162,7 @@ class ServiceNowAdapter extends EventEmitter {
    *
    * @param {ServiceNowAdapter~requestCallback} callback - The callback that
    *   handles the response.
-  */
+   */
   postRecord(callback) {
     /**
      * Write the body for this function.
@@ -194,7 +170,6 @@ class ServiceNowAdapter extends EventEmitter {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-     this.connector.post(callback)
   }
 }
 
