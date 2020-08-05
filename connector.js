@@ -1,4 +1,5 @@
 const request = require('request');
+//const util = require('util');
 
 const checkResponse = /(2\d\d)/;
 
@@ -57,9 +58,18 @@ class ServiceNowConnector {
     * @return {boolean} Returns true if instance is hibernating. Otherwise returns false.
     */
     isHibernating(response) {
+        //let isItHibernatng = response.body.includes('Instance Hibernating page')
+        //let isItHTML = response.body.includes('<html>')
+        //let isItGoodStatus = response.statusCode === 200
+        //let hiberStatus = isItHibernatng +", "+ isItHTML +", "+ isItGoodStatus
+        //log.info("isHibernatin status would be: ", hiberStatus )
+        //log.info("isItHibernatng: ", this.isItHibernatng)
+        //log.info("isItHTML: ", this.isItHTML)
+        //log.info("isItGoodStatus: ", this.isItGoodStatus)
+        //log.info("hiberStatus: ", this.hiberStatus)
         return response.body.includes('Instance Hibernating page')
-            && response.body.includes('<html>')
-            && response.statusCode === 200;
+        && response.body.includes('<html>')
+        && response.statusCode === 200;
     }
 
 
@@ -83,16 +93,21 @@ class ServiceNowConnector {
         // Initialize return arguments for callback
         let callbackData = null;
         let callbackError = null;
+        let httpResponse = !checkResponse.test(response.statusCode)
+        let hiberStatus = this.isHibernating(response);
+        //log.info("Hibernation status: ", hiberStatus); 
+        //log.info("httpResponse status: ", httpResponse); 
 
         // Check for errors
         if (error) {
             log.info('Found an error.');
             callbackError = error;
-        } else if (!checkResponse.test(response.statusCode)) {
+        } else if (httpResponse) {
             log.info('Improper HTTP response code.');
             callbackError = response;
-        } else if (this.isHibernating(response)) {
+        } else if (hiberStatus) {
             callbackError = 'ServiceNow instance is hibernating';
+            log.info(hiberStatus); 
             log.info(callbackError);
         } else {
             callbackData = response;
@@ -136,6 +151,8 @@ class ServiceNowConnector {
             uri: uri,
         };
 
+        //log.info(util.inspect(requestOptions, {depth: null}))
+
         request(requestOptions, (error, response, body) => {
             this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError));
         });
@@ -173,6 +190,7 @@ class ServiceNowConnector {
         let getCallOptions = { ...this.options };
         getCallOptions.method = 'GET';
         getCallOptions.query = 'sysparm_limit=1';
+        //log.info("Got to get-callback")
         this.sendRequest(getCallOptions, (results, error) => callback(results, error));
     }
 
