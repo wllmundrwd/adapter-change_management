@@ -19,34 +19,9 @@
         "type": "object",
         "description": "The first change change management ticket document.",
         "schema": {
-          "type": "array",
-          "items": {
-            "title": "changeTicket",
-            "$ref": "changeRequest#/definitions/changeTicket"
-          }
-        }
-      },
-      "roles": [
-        "admin",
-        "engineer",
-        "operator"
-      ],
-      "task": true
-    },
-    {
-      "name": "postRecord",
-      "summary": "Posts a Change Ticket",
-      "description": "Post a new ServiceNow change management ticket.",
-      "input": [],
-      "output": {
-        "name": "changeTicket",
-        "type": "object",
-        "description": "The change management ticket document.",
-        "schema": {
           "title": "changeTicket",
           "$ref": "changeRequest#/definitions/changeTicket"
         }
-
       },
       "roles": [
         "admin",
