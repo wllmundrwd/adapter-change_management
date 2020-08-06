@@ -157,7 +157,7 @@ class ServiceNowAdapter extends EventEmitter {
    * @param {string} status - The event to emit.
    */
   emitStatus(status) {
-    system.log("Why me?")
+    log.info("Why me?")
     this.emit(status, { id: this.id });
   }
 
